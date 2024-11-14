@@ -5,9 +5,10 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2  #Скачивание кода из репозитория
+        uses: actions/checkout@v2  # Скачиваем репозиторий
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -16,29 +17,31 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Установка зависимостей
+          python -m pip install --upgrade pip  # Обновляем pip
+          pip install -r requirements.txt  # Устанавливаем зависимости
+          pip install pytest-html  # Устанавливаем плагин для HTML отчета
 
       - name: Run tests
         run: |
-          pytest --html=report.html --self-contained-html  # Запуск тестов и генерация отчета
+          pytest --html=report.html --self-contained-html  # Запуск тестов и создание отчета
 
       - name: Upload test report
-        if: always()  # Выполняется даже при ошибках в предыдущих шагах
+        if: always()  # Загружаем отчет даже если тесты не прошли
         uses: actions/upload-artifact@v3
         with:
-          name: test-report
-          path: report.html  # Выгрузка отчета в виде артефакта
+          name: test-report  # Имя артефакта
+          path: report.html  # Путь к отчету
 
   deploy:
-    needs: build  # Выполняется только после успешного завершения "build"
+    needs: build  # Этот job выполняется только после успешного завершения job 'build'
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2  # Скачиваем репозиторий
 
       - name: Upload code artifact
         uses: actions/upload-artifact@v3
         with:
-          name: source-code
-          path: .  # Выгрузка кода в виде артефакта
+          name: source-code  # Имя артефакта
+          path: .  # Загружаем весь исходный код
