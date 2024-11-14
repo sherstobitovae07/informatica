@@ -25,7 +25,7 @@ jobs:
 
       - name: Upload test report
         if: always()  # Выполняется даже при ошибках в предыдущих шагах
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-report
           path: report.html  # Выгрузка отчета в виде артефакта
@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Upload code artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: source-code
           path: .  # Выгрузка кода в виде артефакта
